@@ -1,0 +1,56 @@
+<blockquote class="blockquote ml-5">
+    <h2>My Bank Accounts</h2>
+    <footer class="blockquote">Using inline table editing with <i>Angular</i> and <i>ASP.NET Core</i></footer>
+</blockquote>
+
+<div class="grid-table">
+    <div class="thead">
+        <div class="tr">
+            <div class="td">Account #</div>
+            <div class="td">Account Holder</div>
+            <div class="td">Bank</div>
+            <div class="td">IFSC</div>
+            <div class="td">
+                <button class="btn btn-outline-success" (click)="addBankAccountForm()">
+                    <i class="far fa-plus fa-lg"></i> New Account
+                </button>
+            </div>
+            <div class="td">
+                <span *ngIf="notification" class="elementToFadeInAndOut">
+                    <i class="fas fa-check-circle {{ notification.class }}"></i> {{ notification.message }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="tbody">
+        <form class="tr" [formGroup]="fg" *ngFor="let fg of bankAccountForms.controls; let i=index;"
+            (submit)="recordSubmit(fg)">
+            <div class="td">
+                <input class="form-control" formControlName="accountNumber">
+            </div>
+            <div class="td">
+                <input class="form-control" formControlName="accountHolder">
+            </div>
+            <div class="td">
+                <select class="form-control" formControlName="bankId">
+                    <option value="0">- Select -</option>
+                    <option *ngFor="let bank of bankList" [value]="bank.bankId">{{ bank.bankName }}</option>
+                </select>
+            </div>
+            <div class="td">
+                <input class="form-control" formControlName="IFSC">
+            </div>
+            <div class="td">
+                <button type="submit" class="btn"
+                    [ngClass]="fg.get('bankAccountId').value == 0 ? 'btn-success' : 'btn-outline-dark'"
+                    [disabled]="fg.invalid">
+                    <i class="far fa-save fa-lg"></i>
+                    {{ fg.get('bankAccountId').value == 0 ? 'Submit' : 'Update' }}
+                </button>
+                <button class="btn btn-light ml-1" (click)="deleteBankAccount(fg.get('bankAccountId').value, i)">
+                    <i class="fas fa-trash-can fa-lg text-danger"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
